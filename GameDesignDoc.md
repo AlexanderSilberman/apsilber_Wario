@@ -38,5 +38,14 @@ is hit by a large boulder, comes into contact with the sea of spikes, or goes be
 
 The start, pause, and quit buttons are at the very top of the game window. 
 
+Initial screen is blank just with a large text box telling the title and the controls which upon pushing start switches to the actual game.
+
+Will also have a text box where the user will put their name which will display to the right of the score.
+
+Pause will put the word PAUSE across the game screen and lock all movement in the scene.
+
 The lives and point numbers are in a small box in the top left that wario cannot move into.
 
+Example of layout, "things" images and direction of movement for the things.
+
+![Layout](Layoutimage.jpg "Layout")
