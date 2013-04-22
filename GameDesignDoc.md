@@ -1,89 +1,42 @@
-# Game Design Document
-This is a place holder for your game design document. You are advised to write your document in [Markdown](http://daringfireball.net/projects/markdown/) and the following section will show you how to write a document using Markdown markup.
+### Game Design Document
 
-Alternativley, you can write your document in plain text if you wish.
+## Wario's Treasure Mountain
 
-----
+###Goal
 
-## Markdown
-Markdown is a human-readable structured plain text format that is used to convert text into HTML. GitHub automatically renders Markdown into HTML.
+Wario has heard of a huge treasure at the top of a mountain that is leaking coins and diamonds down below and resolves to get as much of the money as he can. The game mostly focuses on Wario climbing the side of the mountain trying to get all the coins on the screen to advance to the next level without getting hit by boulders or being skewered by the thieves below him trying to grab him with their spike machine and steal all his ill-gained money.
 
-This is a crash course on how to use Markdown. The following section will show you the plain text used to generate the document shown in the rendering section.
+#### Game Objects
 
-### Code
+Boulders: Boulders are some of the main hazards in the game. They will instantiate at the very top of the screen and fall down towards the bottom at which point they vanish. There will be two or three different sizes of boulder which fall at different speeds. Larger boulders will instantly crush wario and remove a life while smaller ones will bring his points down a bit and make him fall a little bit. 
 
-```
-# Header 1
-## Header 2
-### Header 3
-#### Header 4
-##### Header 5
+Ledges: Ledges are horizontal areas of earth that stick out of the mountain wall that Wario climbs. They will break Wario's fall and allow him to jump up to another ledge or to continue climbing. They are usually stationary but if Wario lands on one after 5 seconds it will begin collapsing and fall downwards off screen.
 
-You can also write in **bold** or _italics_. You can also ~~strike through~~ or write inline `Code Segments`
+Birds: Birds will sporadically appear from the side of the screen and fly right or left while holding a diamond. If Wario makes contact with the bird it will fly up off the screen and Wario's money total will increase.
 
->Blockquotes are done as such.
+Garlic: Garlic cloves will sometimes fall from the sky with the boulders. Due to their innate magical power they will float in the middle of the screen moving in a circle after they appear and then winking out of existence if they aren't touched. They will add one life to Wario's number of lives if he catches one.
 
-Just make sure to separate paragraphs with an emptyline. 
-Otherwise, they are considered in the same paragraph.
-
-You link to [Google](https://www.google.com) as such and lists are written has follows:
-  1. First you indent with two empty spaces.
-  1. Then, you use:
-    * `1.` to signal an ordered (i.e. numbered) list, or
-    * `*`, `-`, `+` to represent an unordered list.
-      1. Make sure to maintain indentation
-      1. As it is used to identify sub-lists
-  1. Numbering and symboles don't matter as they are auto-generated later.
-
-Tables are pretty easy to make:
-
-| Tables        | Are           | Easy          |
-| ------------- |:-------------:| -------------:|
-| left-aligned  | centered      | right-aligned |
-| header are    | bolded and    | centered      |
-| zebra stripes | are neat      | 1             |
+Spikes: A sea of spikes will appear one minute after the battle begins. It will continually move upwards until it reaches the top of the screen. If Wario touches the spikes he dies instantly making an essential time limit for each stage.
 
 
-Images are added inline by using the following syntax
-![alt text](http://octodex.github.com/images/Professortocat_v2.png "Image Title")
-```
+####Commands
 
-----
+The game is played using the keyboard. The arrow keys allow Wario when he is on the wall to move to the left, right, up and down or diagonal if two keys are clicked at the same time. When standing on a ledge pressing the space bar will have wario jump and pushing the up arrow key while jumping will make Wario resume climbing. 
 
-### Rendering
-This section shows the rendering of the plain text above.
+#### Score
 
-# Header 1
-## Header 2
-### Header 3
-#### Header 4
-##### Header 5
+The player's score increases with every coin or diamond the player comes across. Each coin gives 50 points while a diamond gives 200 points. Completing a level by getting every single coin on the map also increases your points by 200 times the level number. 
 
-You can also write in **bold** or _italics_. You can also ~~strike through~~ or write inline `Code Segments`
+Each time a player is hit by a small boulder they will lose 100 points as some of the coins are knocked from Wario's bag. 
 
->Blockquotes are done as such.
+####Lives
 
-Just make sure to separate paragraphs with an emptyline. 
-Otherwise, they are considered in the same paragraph.
+In the upper right of the screen will be a little image of wario with a number next to it showing how many lives the player has remaining. Each time the player 
+is hit by a large boulder, comes into contact with the sea of spikes, or goes below the screen due to falling from being hit by a small boulder they will lose a life. Extra lives will be granted every 2000 points as Wario buys a new stunt double.
 
-You link to [Google](https://www.google.com) as such and lists are written has follows:
-  1. First you indent with two empty spaces.
-  1. Then, you use:
-    * `1.` to signal an ordered (i.e. numbered) list, or
-    * `*`, `-`, `+` to represent an unordered list.
-      1. Make sure to maintain indentation
-      1. As it is used to identify sub-lists
-  1. Numbering and symboles don't matter as they are auto-generated later.
+### Layout
 
-Tables are pretty easy to make:
+The start, pause, and quit buttons are at the very top of the game window. 
 
-| Tables        | Are           | Easy          |
-| ------------- |:-------------:| -------------:|
-| left-aligned  | centered      | right-aligned |
-| header are    | bolded and    | centered      |
-| zebra stripes | are neat      | 1             |
-
-
-Images are added inline by using the following syntax
-![alt text](http://octodex.github.com/images/Professortocat_v2.png "Image Title")
+The lives and point numbers are in a small box in the top left that wario cannot move into.
 
