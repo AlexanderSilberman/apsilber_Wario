@@ -48,4 +48,4 @@ The lives and point numbers are in a small box in the top left that wario cannot
 
 Example of layout, "things" images and direction of movement for the things.
 
-![Layout](Layoutimage.jpg "Layout")
+![Layout](Layoutimage.JPG "Layout")
