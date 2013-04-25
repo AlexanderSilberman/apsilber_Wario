@@ -1,12 +1,12 @@
 # Game - Programming Assignments Private Repository
 ### Student Information
-  + Name: Tommy Trojan
-  + USC Email: ttrojan@usc.edu
-  + USC ID: 0123456789
+  + Name: Alexander Silberman
+  + USC Email: apsilber@usc.edu
+  + USC ID: 4897592894
 
 ### Game Information
-  + Game Name: myAwsomeGame
-  + Game Description: One sentence game description
+  + Game Name: Wario's Treasure Mountain
+  + Game Description: Have Wario climb to the top avoiding boulders and spikes as he grabs all the money, diamonds, and garlic he can!
   + [Game Design Doc](GameDesignDoc.md)
 
 
