@@ -5,40 +5,48 @@ using namespace std;
 
 MainWindow::MainWindow(){
   mb=menuBar();
-  mb->addAction("start");
-  
+  QMenu *fileMenu = new QMenu("File",this);
+  mb->addMenu(fileMenu);
+  QAction *exitAction = new QAction("Exit",this);
+  QAction *pauseAction = new QAction("Pause",this);
+  QAction *startAction = new QAction("Start",this);
+  fileMenu->addAction(startAction);
+  connect(startAction,SIGNAL(triggered()), this, SLOT(begin()));
+  fileMenu->addAction(pauseAction);
+  connect(pauseAction,SIGNAL(triggered()), this, SLOT(stop()));
+  fileMenu->addAction(exitAction);
+  connect(exitAction,SIGNAL(triggered()),qApp, SLOT(quit()));
+
+  wallimg=new QPixmap("wall.png");
+  QBrush mountain;
+  mountain.setTexture(*wallimg);
+
+  scene=new Screen(this);
+  scene->setBackgroundBrush(mountain);
+  scene->setSceneRect(0,0,700,700);
+  view=new ViewWindow(scene,this);
+  setCentralWidget(view);
+  /*
   scene=new QGraphicsScene();
   view=new QGraphicsView(scene);
   //scene->setFocus();
+  
   view->setFixedSize(800,800);
   view->setWindowTitle("Wario's Treasure Mountain");
   view->setAlignment(Qt::AlignLeft | Qt::AlignTop);
   scene->setSceneRect(0,0,700,700);
-  
-  quit=new QPushButton(tr("Quit"));
-  connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
-  start=new QPushButton(tr("Start"));
-  connect(start,SIGNAL(clicked()), this, SLOT(begin()));
-  pause=new QPushButton(tr("pause"));
-  connect(pause, SIGNAL(clicked()), this, SLOT(stop()));
-
+  */
+ 
   timer=new QTimer(this);
-  timer->setInterval(10);
+  timer->setInterval(20);
   connect(timer, SIGNAL(timeout()), this, SLOT(handleTimer()));
 
-  wartimer=new QTimer(this);
-  wartimer->setInterval(10);
-  connect(wartimer, SIGNAL(timeout()), this, SLOT(handleTimer()));
-  
-  gridLayout=new QGridLayout();
-  gridLayout->addWidget(start,0,0);
-  gridLayout->addWidget(pause,0,1);
-  gridLayout->addWidget(quit,0,2);
-  gridLayout->addWidget(view,1,0,3,3);
-  setLayout(gridLayout);
-  
-  garlicimg=new QPixmap("diamond.png");
-  warioimg=new QPixmap("diamond.png");
+  garlicimg=new QPixmap("garlic.png");
+  warioimg=new QPixmap("Wario.png");
+  bigboulderimg=new QPixmap("bigboulder.png");
+  diamondimg=new QPixmap("diamond.png");
+  coinimg=new QPixmap("Coin.png");
+
 
 }
 
@@ -46,16 +54,29 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e){
-  cout<<"here?"<<endl;
   switch(e->key()){
-  case Qt::Key_Left:
-    war->direction(-3,0);
-  case Qt::Key_Right:
-    war->direction(3,0);
-  case Qt::Key_Up:
-    war->direction(0,-3);
-  case Qt::Key_Down:
-    war->direction(0,3);
+  case Qt::Key_Left:  war->direction(-3,0);
+    break;
+  case Qt::Key_Right:  war->direction(3,0);
+    break;
+  case Qt::Key_Up: war->direction(0,-3);
+    break;
+  case Qt::Key_Down:  war->direction(0,3);
+    break;
+  }
+
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *e){
+  switch(e->key()){
+  case Qt::Key_Left:  war->direction(3,0);
+    break;
+  case Qt::Key_Right:  war->direction(-3,0);
+    break;
+  case Qt::Key_Up: war->direction(0,3);
+    break;
+  case Qt::Key_Down:  war->direction(0,-3);
+    break;
   }
 
 }
@@ -86,11 +107,28 @@ void MainWindow::handleTimer(){
 
 void MainWindow::begin(){
   timer->start();
-  Garlic* garlic1=new Garlic(garlicimg,500, 50);
+  Garlic* garlic1=new Garlic(garlicimg,200, 200);
   scene->addItem(garlic1);
   list.push_back(garlic1);
 
-  Wario* wario1=new Wario(warioimg, 250, 250);
-  scene->addItem(wario1);
-  list.push_back(wario1);
+  war=new Wario(warioimg, 500, 500);
+  scene->addItem(war);
+  list.push_back(war);
+}
+
+void MainWindow::mousePressEvent(QGraphicsSceneMouseEvent *e){
+  e=e;
+}
+
+ViewWindow::ViewWindow(QGraphicsScene* nscene, QMainWindow* main) : QGraphicsView(nscene){
+  main->setFocus();
+}
+
+
+Screen::Screen(QMainWindow* main){
+  main_=main;
+}
+
+void Screen::mousePressEvent(QGraphicsSceneMouseEvent *e){
+  main_->setFocus();
 }

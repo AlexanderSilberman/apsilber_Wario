@@ -19,6 +19,20 @@
 
 #include "item.h"
 
+class ViewWindow : public QGraphicsView{
+ public:
+  ViewWindow(QGraphicsScene* nscene, QMainWindow* main);
+
+};
+
+class Screen: public QGraphicsScene{
+ public:
+  Screen(QMainWindow* main);
+  void mousePressEvent(QGraphicsSceneMouseEvent *e);
+ private:
+  QMainWindow* main_;
+    };
+
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
@@ -27,6 +41,9 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
 
   void keyPressEvent(QKeyEvent *e);
+  void keyReleaseEvent(QKeyEvent *e);
+  void mousePressEvent(QGraphicsSceneMouseEvent *e);
+  
 
   public slots:
 
@@ -35,14 +52,13 @@ class MainWindow : public QMainWindow {
   void handleTimer();
 
  private: 
-  QGraphicsScene *scene;
-  QGraphicsView *view;
+  Screen* scene;
+  ViewWindow* view;
   QPushButton *start;
   QPushButton *quit;
   QPushButton *pause;
   QGridLayout *gridLayout;
   QTimer *timer;
-  QTimer *wartimer;
 
   QMenuBar *mb;
 
@@ -50,8 +66,16 @@ class MainWindow : public QMainWindow {
 
   QPixmap *garlicimg;
   QPixmap *warioimg;
+  QPixmap *bigboulderimg;
+  QPixmap *diamondimg;
+  QPixmap *coinimg;
+  QPixmap *wallimg;
+  QPixmap *ledgeimg;
+  QPixmap *smallrockimg;
 
   Wario *war;
 };
+
+
 
 #endif

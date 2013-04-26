@@ -16,8 +16,8 @@ class Item : public QGraphicsPixmapItem {
  protected:
   int x;
   int y;
-  int vX;
   int vY;
+  int vX;
   bool alive;
   QPixmap *pixMap;
 };

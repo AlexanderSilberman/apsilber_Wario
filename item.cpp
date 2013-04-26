@@ -16,19 +16,20 @@ bool Item::isAlive(){
 }
 
 Garlic::Garlic(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
-  vY=5;
-  vX=0;
 }
 
 void Garlic::move(){
-  y+=vY;
+  y+=3;
   setPos(x,y);
 }
 
-Wario::Wario(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
+Wario::Wario(QPixmap *pm, int nx, int ny): Item(pm,nx,ny){
+  
   vX=0;
   vY=0;
+  
 }
+
 
 void Wario::move(){
   y+=vY;
@@ -39,5 +40,6 @@ void Wario::move(){
 void Wario::direction(int mX, int mY){
   vX+=mX;
   vY+=mY;
-  cout<<"here"<<endl;
 }
+
+
