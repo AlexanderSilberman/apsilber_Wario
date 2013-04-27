@@ -12,6 +12,8 @@ class Item : public QGraphicsPixmapItem {
   Item(QPixmap *pm, int nx, int ny);
   virtual void move() = 0;
   bool isAlive();
+  int getPoints();
+  bool getNice();
 
  protected:
   int x;
@@ -19,7 +21,9 @@ class Item : public QGraphicsPixmapItem {
   int vY;
   int vX;
   bool alive;
+  bool nice;
   QPixmap *pixMap;
+  int points;
 };
 
 
@@ -35,6 +39,44 @@ class Wario:public Item {
   Wario(QPixmap *pm, int nx, int ny);
   void move();
   void direction(int mX, int mY);
+};
+
+class Diamond:public Item {
+ public:
+  Diamond(QPixmap *pm, int nx, int ny);
+  void move();
+
+};
+
+class BBoulder:public Item {
+ public:
+  BBoulder(QPixmap *pm, int nx, int ny);
+  void move();
+
+};
+
+class SBoulder:public Item {
+ public:
+  SBoulder(QPixmap *pm, int nx, int ny);
+  void move();
+
+};
+
+class Ledge:public Item {
+ public:
+  Ledge(QPixmap *pm, int nx, int ny);
+  void move();
+  void stood();
+ private:
+  bool touched;
+  int counter;
+};
+
+class Coin:public Item {
+ public:
+  Coin(QPixmap *pm, int nx, int ny);
+  void move();
+
 };
 
 #endif

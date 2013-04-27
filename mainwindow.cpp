@@ -4,6 +4,8 @@
 using namespace std;
 
 MainWindow::MainWindow(){
+
+  points=100;
   mb=menuBar();
   QMenu *fileMenu = new QMenu("File",this);
   mb->addMenu(fileMenu);
@@ -25,28 +27,39 @@ MainWindow::MainWindow(){
   scene->setBackgroundBrush(mountain);
   scene->setSceneRect(0,0,700,700);
   view=new ViewWindow(scene,this);
-  setCentralWidget(view);
-  /*
-  scene=new QGraphicsScene();
-  view=new QGraphicsView(scene);
-  //scene->setFocus();
-  
-  view->setFixedSize(800,800);
-  view->setWindowTitle("Wario's Treasure Mountain");
   view->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-  scene->setSceneRect(0,0,700,700);
-  */
- 
+  view->setWindowTitle("Wario's Treasure Mountain");
+  view->setFixedSize(800,800);
+  setCentralWidget(view);
+  QBrush brush(Qt::white);
+  scene->addRect(0,0,500,50,QPen(),brush);
+
+  QFont font("Times",25);
+  QString s="Score: ";
+  QString sco=QString::number(points);
+  sco=sco.rightJustified(7,'0');
+  s=s+sco;
+  score=new QGraphicsSimpleTextItem(s);
+  score->setFont(font);
+  QPointF p(20,10);
+  score->setPos(p);
+  score->setZValue(2);
+  scene->addItem(score);
+
   timer=new QTimer(this);
   timer->setInterval(20);
   connect(timer, SIGNAL(timeout()), this, SLOT(handleTimer()));
 
   garlicimg=new QPixmap("garlic.png");
+
   warioimg=new QPixmap("Wario.png");
   bigboulderimg=new QPixmap("bigboulder.png");
   diamondimg=new QPixmap("diamond.png");
   coinimg=new QPixmap("Coin.png");
+  ledgeimg=new QPixmap("ledge.png");
+  smallrockimg=new QPixmap("smallrock.png");
 
+  warioimg->scaled(500,500,Qt::IgnoreAspectRatio);
 
 }
 
@@ -93,6 +106,10 @@ void MainWindow::stop(){
 
 
 void MainWindow::handleTimer(){
+  counter++;
+  if(counter==100){
+    counter=0;
+  }
   for(int i=0;i<list.size();i++){
     if(!(list.at(i)->isAlive())){
       list.removeAt(i);
@@ -102,18 +119,51 @@ void MainWindow::handleTimer(){
   for(int i=0;i<list.size();i++){
     list.at(i)->move();
   }
+  for(int i=1;i<list.size();i++){
+    if(list.at(0)->collidesWithItem(list.at(i))){
+      if(list.at(i)->getNice()){
+	points+=list.at(i)->getPoints();
+	QFont font("Times",25);
+	QString s="Score: ";
+	QString sco=QString::number(points);
+	sco=sco.rightJustified(7,'0');
+	s=s+sco;
 
+	score->setText(s);
+
+      }
+      else{
+	cout<<"DEATH"<<endl;
+	delete war;
+
+      }
+      delete list.at(i);
+      list.removeAt(i);
+    }
+      	
+  }
+   
 }
-
 void MainWindow::begin(){
+
+ war=new Wario(warioimg, 500, 500);
+  scene->addItem(war);
+  list.push_back(war);
+
+
   timer->start();
   Garlic* garlic1=new Garlic(garlicimg,200, 200);
   scene->addItem(garlic1);
   list.push_back(garlic1);
 
-  war=new Wario(warioimg, 500, 500);
-  scene->addItem(war);
-  list.push_back(war);
+  Diamond* diamond1=new Diamond(diamondimg,0,400);
+  scene->addItem(diamond1);
+  list.push_back(diamond1);
+
+  SBoulder* sboulder=new SBoulder(smallrockimg,400,0);
+  scene->addItem(sboulder);
+  list.push_back(sboulder);
+
 }
 
 void MainWindow::mousePressEvent(QGraphicsSceneMouseEvent *e){
@@ -130,5 +180,6 @@ Screen::Screen(QMainWindow* main){
 }
 
 void Screen::mousePressEvent(QGraphicsSceneMouseEvent *e){
+  e=e;
   main_->setFocus();
 }

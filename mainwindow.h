@@ -52,6 +52,8 @@ class MainWindow : public QMainWindow {
   void handleTimer();
 
  private: 
+  int points;
+
   Screen* scene;
   ViewWindow* view;
   QPushButton *start;
@@ -73,7 +75,11 @@ class MainWindow : public QMainWindow {
   QPixmap *ledgeimg;
   QPixmap *smallrockimg;
 
+  QGraphicsSimpleTextItem * score;
+
   Wario *war;
+
+  int counter;
 };
 
 
