@@ -15,4 +15,5 @@
 Makefile
 *.pro
 moc_*
-*.png
+
+game_apsilber
