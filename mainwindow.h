@@ -43,7 +43,7 @@ class MainWindow : public QMainWindow {
   void keyPressEvent(QKeyEvent *e);
   void keyReleaseEvent(QKeyEvent *e);
   void mousePressEvent(QGraphicsSceneMouseEvent *e);
-  
+  void create(int count);
 
   public slots:
 
@@ -52,7 +52,11 @@ class MainWindow : public QMainWindow {
   void handleTimer();
 
  private: 
+  int coins;
   int points;
+  int lives;
+  bool started;
+  int timeout;
 
   Screen* scene;
   ViewWindow* view;
@@ -76,10 +80,12 @@ class MainWindow : public QMainWindow {
   QPixmap *smallrockimg;
 
   QGraphicsSimpleTextItem * score;
+  QGraphicsSimpleTextItem * life;
 
   Wario *war;
 
   int counter;
+  int total;
 };
 
 

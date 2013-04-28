@@ -23,12 +23,17 @@ bool Item::getNice(){
   return nice;
 }
 
+int Item::getName(){
+  return name;
+}
+
 Garlic::Garlic(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
 }
 
 void Garlic::move(){
   y+=3;
   setPos(x,y);
+  nice=true;
 }
 
 Wario::Wario(QPixmap *pm, int nx, int ny): Item(pm,nx,ny){
@@ -41,24 +46,59 @@ Wario::Wario(QPixmap *pm, int nx, int ny): Item(pm,nx,ny){
 void Wario::move(){
   y+=vY;
   x+=vX;
+  if(y<=0){
+    y=0;
+  }
+  if(x<=0){
+    x=0;
+  }
+  if(x>=790){
+    x=790;
+  }
   setPos(x,y);
-  if(y==790){
+  if(y>=790){
     alive=false;
   }
 }
 
-void Wario::direction(int mX, int mY){
-  vX+=mX;
-  vY+=mY;
+void Wario::direction(float mX, float mY){
+  if(mX==9){
+    vX=0;
+  }
+  else if(mY==9){
+    vY=0;
+  }
+  else{
+    vX+=mX;
+    vY+=mY;
+  }
+}
+
+void Wario::reset(){
+  x=500;
+  y=500;
+  setPos(500,500);
+  alive=true;
 }
 
 Diamond::Diamond(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
   nice=true;
   points=1000;
+  if(x>0){
+    left=true;
+  }
+  else{
+    left=false;
+  }
 }
 
 void Diamond::move(){
-  x+=2;
+  if(left){
+  x-=2;
+  }
+  else{
+    x+=2;
+  }
   setPos(x,y);
   if(x==-40 || x==840){
     alive=false;
@@ -72,7 +112,7 @@ SBoulder::SBoulder(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
 void SBoulder::move(){
   y+=3;
   setPos(x,y);
-  if(y>=780){
+  if(y>=820){
     alive=false;
   }
 }
@@ -116,7 +156,7 @@ BBoulder::BBoulder(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
 void BBoulder::move(){
   y+=2;
   setPos(x,y);
-  if(y>=780){
+  if(y>=820){
     alive=false;
   }
 }

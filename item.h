@@ -14,16 +14,19 @@ class Item : public QGraphicsPixmapItem {
   bool isAlive();
   int getPoints();
   bool getNice();
+  int getName();
 
  protected:
-  int x;
-  int y;
-  int vY;
-  int vX;
+  float x;
+  float y;
+  float vY;
+  float vX;
   bool alive;
   bool nice;
   QPixmap *pixMap;
   int points;
+  /* 1 is a coin, 2 is a diamond, 3 is a ledge, 4 is garlic */
+  int name;
 };
 
 
@@ -38,13 +41,16 @@ class Wario:public Item {
  public:
   Wario(QPixmap *pm, int nx, int ny);
   void move();
-  void direction(int mX, int mY);
+  void direction(float mX, float mY);
+  void reset();
 };
 
 class Diamond:public Item {
  public:
   Diamond(QPixmap *pm, int nx, int ny);
   void move();
+ private: 
+  bool left;
 
 };
 
