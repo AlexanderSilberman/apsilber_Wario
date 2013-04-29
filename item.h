@@ -34,6 +34,9 @@ class Garlic:public Item {
  public:
   Garlic(QPixmap *pm, int nx, int ny);
   void move();
+ private:
+  int iX;
+  int iY;
 
 };
 
@@ -43,6 +46,8 @@ class Wario:public Item {
   void move();
   void direction(float mX, float mY);
   void reset();
+
+  MainWindow * m_;
 };
 
 class Diamond:public Item {
@@ -83,6 +88,16 @@ class Coin:public Item {
   Coin(QPixmap *pm, int nx, int ny);
   void move();
 
+};
+
+class Spikes:public Item{
+ public:
+  Spikes(QPixmap *pm, int nx, int ny);
+  void move();
+  void down();
+
+ private:
+  int counter;
 };
 
 #endif

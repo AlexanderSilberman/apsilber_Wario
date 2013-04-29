@@ -28,16 +28,27 @@ int Item::getName(){
 }
 
 Garlic::Garlic(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
+  name=3;
+  iX=nx;
+  iY=ny;
 }
 
 void Garlic::move(){
-  y+=3;
+  if(y==304 && x<iX+104){
+    x+=8;
+  }
+  if(y==504 && x<=iX+104 && x!=iX){
+    x-=8;
+  }
+  if(x==iX || x==iX+104){
+    y+=8;
+  }
+  
   setPos(x,y);
   nice=true;
 }
 
 Wario::Wario(QPixmap *pm, int nx, int ny): Item(pm,nx,ny){
-  
   vX=0;
   vY=0;
   
@@ -83,6 +94,7 @@ void Wario::reset(){
 
 Diamond::Diamond(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
   nice=true;
+  name=1;
   points=1000;
   if(x>0){
     left=true;
@@ -94,10 +106,10 @@ Diamond::Diamond(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
 
 void Diamond::move(){
   if(left){
-  x-=2;
+    x-=5;
   }
   else{
-    x+=2;
+    x+=5;
   }
   setPos(x,y);
   if(x==-40 || x==840){
@@ -110,7 +122,7 @@ SBoulder::SBoulder(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
 }
 
 void SBoulder::move(){
-  y+=3;
+  y+=7.5;
   setPos(x,y);
   if(y>=820){
     alive=false;
@@ -120,6 +132,7 @@ void SBoulder::move(){
 Coin::Coin(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
   nice=true;
   points=100;
+  name=2;
 }
 
 void Coin::move(){
@@ -130,14 +143,15 @@ Ledge::Ledge(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
   touched=false;
   nice=true;
   counter=0;
+  name=4;
 }
 
 void Ledge::move(){
   if(touched){
     counter++;
   }
-  if(counter==50){
-  y+=3;
+  if(counter>=5){
+  y+=7.5;
   setPos(x,y);
   if(y>=780){
     alive=false;
@@ -154,9 +168,43 @@ BBoulder::BBoulder(QPixmap *pm, int nx, int ny) : Item(pm, nx, ny){
 }
 
 void BBoulder::move(){
-  y+=2;
+  y+=5;
   setPos(x,y);
   if(y>=820){
     alive=false;
   }
+}
+
+Spikes::Spikes(QPixmap *pm, int nx, int ny) :Item(pm, nx, ny){
+  nice=false;
+  counter=0;
+}
+
+void Spikes::move(){
+  counter++;
+  if(counter<0){
+    y+=7.5;
+  }
+  else{
+  if(counter%50<20){
+    y-=8;
+    setPos(x,y);
+  }
+  else if(counter%50<25){
+
+  }
+  else if(counter%50<45){
+    y+=6;
+    setPos(x,y);
+  }
+  else{
+
+  }
+  }
+  
+}
+
+
+void Spikes::down(){
+  counter=-20;
 }
