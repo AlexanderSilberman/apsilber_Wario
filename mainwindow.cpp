@@ -207,7 +207,7 @@ void MainWindow::stop(){
 }
 /** Called when the counter reaches an interval of 10 and creates an item on the screen based on the counter number. */
 void MainWindow::create(int count){
-
+  /** Big boulders are only on level 3 and up, spikes and ledges level 5 and up. */
  switch(count){
    /**Every 500 timeouts the timer interval decreases by 1 */
  case 10:{
@@ -409,6 +409,7 @@ void MainWindow::handleTimer(){
     }
       	
   }
+  /** Deal with spikes and ledge collisions */
   if(spikescreate && spike==NULL){
     spikescreate=false;
     total=0;
@@ -488,6 +489,7 @@ void MainWindow::setLives(int num){
   }
 }
 
+/** Function for writing the scores and keeping up the data. Only activated when a game is finished. Opens up scores.txt and reads in the name and score which are each on a line separated by a space. Makes a score struct for the players's current name and score and checks if it is higher than any of the five in the list. If it is it adds it where it should go, writes the new file to scores.txt, and outputs the total string to the scene. */
 void MainWindow::end(){
   QFont font("Times",50);
   ifstream scfile;
@@ -575,6 +577,10 @@ void MainWindow::begin(){
   /**If being used to reset the game it deletes every item in the list, resets lives,points and the timer interval */
   if(started || ended){
     if(ended){
+      delete line1;
+    }
+    else{
+      end();
       delete line1;
     }
     for(int i=0;i<list.size();i++){
