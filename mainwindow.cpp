@@ -15,6 +15,7 @@ MainWindow::MainWindow(){
   points=100;
   total=0;
   coins=0;
+  level=0;
   randgarlic=rand()%4+3;
   randsboulder=rand()%4;
   randbboulder=rand()%2;
@@ -92,6 +93,8 @@ MainWindow::MainWindow(){
   ledgeimg=new QPixmap("ledge.png");
   smallrockimg=new QPixmap("smallrock.png");
   spikesimg=new QPixmap("spikes.png");
+  level2img=new QPixmap("level2.png");
+  level3img=new QPixmap("Level3.png");
 
   r=new QGraphicsRectItem(200,200,400,400);
   r->setBrush(brush);
@@ -215,6 +218,7 @@ void MainWindow::create(int count){
      }
    }
    /** after 300 timeouts there is a 33% chance the spikes will be created */
+   if(level>=4){
    if(total>=3 && !spikescreate){
      int s=rand()%3;
      if(s==2){
@@ -224,7 +228,9 @@ void MainWindow::create(int count){
        spikescreate=true;
      }
    }
+   }
    timer->setInterval(timeout);
+   if(level>=2){
    if(randbboulder==0){
      int xrand=rand()%800;
      BBoulder* big=new BBoulder(bigboulderimg,xrand,-20);
@@ -232,8 +238,10 @@ void MainWindow::create(int count){
      list.push_back(big);
      randbboulder=rand()%2;
    }
+   }
      break;
  }
+ 
  case 20:{
    if(randsboulder==0){
      int xrand=rand()%800;
@@ -273,6 +281,7 @@ void MainWindow::create(int count){
  }
 
  case 50:{
+   if(level<3){
    if(total==randgarlic){
      int xrand=200+rand()%400;
      Garlic* gar=new Garlic(garlicimg,xrand,0);
@@ -280,9 +289,11 @@ void MainWindow::create(int count){
      list.push_back(gar);
      randgarlic=rand()%4+3;
    }
+   }
    break;
  }
  case 60:{
+   if(level>=4){
    int r=rand()%4;
    if(!ledgecreate && r==3){
      int xrand=rand()%600;
@@ -292,6 +303,8 @@ void MainWindow::create(int count){
      list.push_back(led);
      ledgecreate=true;
    }
+   }
+   break;
  }
 
 
@@ -306,12 +319,14 @@ case 70:{
    break;
  }
  case 80:{
+   if(level>=2){
    if(randbboulder==1){
      int xrand=rand()%800;
      BBoulder* big=new BBoulder(bigboulderimg,xrand,-20);
      scene->addItem(big);
      list.push_back(big);
      randbboulder=rand()%2;
+   }
    }
    break;
  }
@@ -424,6 +439,17 @@ void MainWindow::changePoints(int i){
   if(i==100){
     coins--;
     if(coins==0){
+      level++;
+      if(level==2){
+	QBrush mountain;
+	mountain.setTexture(*level2img);
+	scene->setBackgroundBrush(mountain);
+      }
+      if(level==4){
+	QBrush mountain;
+	mountain.setTexture(*level3img);
+	scene->setBackgroundBrush(mountain);
+      }
       newLevel();
     }
   }

@@ -75,6 +75,7 @@ class MainWindow : public QMainWindow {
   bool started;
   bool ended;
   int timeout;
+  int level;
 
   QString nm;
   QTextEdit *text;
@@ -100,6 +101,8 @@ class MainWindow : public QMainWindow {
   QPixmap *ledgeimg;
   QPixmap *smallrockimg;
   QPixmap *spikesimg;
+  QPixmap *level2img;
+  QPixmap *level3img;
 
   QGraphicsSimpleTextItem * score;
   QGraphicsSimpleTextItem * life;
