@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include <string>
 
 #include <iostream>
 using namespace std;
@@ -133,6 +134,15 @@ MainWindow::MainWindow(){
   line5->setZValue(2);
   scene->addItem(line5);
 
+
+  text=new QTextEdit;
+
+  QDockWidget *qdw = new QDockWidget();
+  qdw->setWidget(text);
+  addDockWidget(Qt::TopDockWidgetArea, qdw);
+  qdw->setFeatures(QDockWidget::NoDockWidgetFeatures);
+
+
 }
 
 MainWindow::~MainWindow(){
@@ -199,8 +209,8 @@ void MainWindow::create(int count){
    /**Every 500 timeouts the timer interval decreases by 1 */
  case 10:{
    total++;
-   if(total%5==0){
-     if(timeout!=20){
+   if(total%2==0){
+     if(timeout!=10){
        timeout--;
      }
    }
@@ -208,7 +218,7 @@ void MainWindow::create(int count){
    if(total>=3 && !spikescreate){
      int s=rand()%3;
      if(s==2){
-       Spikes* spike=new Spikes(spikesimg, 0,800);
+       spike=new Spikes(spikesimg, 0,800);
        scene->addItem(spike);
        list.push_back(spike);
        spikescreate=true;
@@ -280,6 +290,7 @@ void MainWindow::create(int count){
      led=new Ledge(ledgeimg,xrand,yrand);
      scene->addItem(led);
      list.push_back(led);
+     ledgecreate=true;
    }
  }
 
@@ -295,7 +306,7 @@ case 70:{
    break;
  }
  case 80:{
-   if(randbboulder==0){
+   if(randbboulder==1){
      int xrand=rand()%800;
      BBoulder* big=new BBoulder(bigboulderimg,xrand,-20);
      scene->addItem(big);
@@ -330,6 +341,13 @@ void MainWindow::handleTimer(){
   /**If an item goes off screen it will be deleted and removed from the list. */
   for(int i=0;i<list.size();i++){
     if(!(list.at(i)->isAlive())  && i!=0){
+      if(list.at(i)==led){
+	delete led;
+	ledgecreate=false;
+      }
+      else{
+	delete list.at(i);
+      }
       list.removeAt(i);
     }
   }
@@ -365,14 +383,26 @@ void MainWindow::handleTimer(){
 	}
       }
       if(name!=4){
+	if(list.at(i)==spike){
+	  spike=NULL;
+	}
 	delete list.at(i);
 	list.removeAt(i);
+	
       }
      
     }
       	
   }
-  if(spikescreate && ledgecreate){
+  if(spikescreate && spike==NULL){
+    spikescreate=false;
+    total=0;
+  }
+  if(spikescreate && ledgecreate && led!=NULL){
+    /*
+    cout<<spike<<endl;
+    cout<<led<<endl;
+    */
     if(spike->collidesWithItem(led)){
       spike->down();
     }
@@ -427,15 +457,100 @@ void MainWindow::setLives(int num){
     started=false;
     ended=true;
     timer->stop();
+    end();
     return;
   }
 }
+
+void MainWindow::end(){
+  QFont font("Times",50);
+  ifstream scfile;
+  ofstream ocfile;
+  QList<Score*> highscores;
+  Score* uscore=new Score;
+  uscore->hscore=points;
+
+  uscore->user=text->toPlainText();
+  string t=uscore->user.toStdString();
+  uscore->test=t;
+
+  scfile.open("scores.txt");
+  if(scfile.fail()){
+    ocfile.open("scores.txt");
+    scfile.open("scores.txt");
+    if(scfile.fail()){
+      cout<<"error opening scores.txt"<<endl;
+    }
+  }
+  Score* x=new Score();
+  scfile>>x->test;
+  while(!scfile.eof()){
+    scfile>>x->hscore;
+    highscores.push_back(x);
+    x=new Score();
+    scfile.ignore(1000,'\n');
+    scfile>>x->test;
+  }
+  while(highscores.length()>5){
+    highscores.pop_back();
+  }
+
+  if(!highscores.empty()){
+    int c=0;
+      for(int i=0;i<highscores.length();i++){
+	if(highscores.at(i)->hscore<uscore->hscore){
+	  highscores.insert(i,uscore);
+	  c=1;
+	  if(highscores.length()>5){
+	    highscores.removeAt(5);
+	  }
+	  break;
+	  
+	}
+      }
+      if(highscores.length()<5 && c==0){
+	highscores.push_back(uscore);
+      }
+  }
+  else{   
+    highscores.insert(0,uscore);
+  }
+  QString total="";
+  for(int i=0;i<highscores.length() ;i++){
+    highscores.at(i)->user=QString::fromStdString(highscores.at(i)->test);
+    total+=highscores.at(i)->user;
+    total+=" ";
+    QString s=QString::number(highscores.at(i)->hscore);
+    total+=s;
+    total+='\n';
+   
+  }
+  line1=new QGraphicsSimpleTextItem(total);
+  line1->setFont(font);
+  QPointF p2(200,210);
+  line1->setPos(p2);
+  line1->setZValue(2);
+  scene->addItem(line1);
+
+  ocfile.open("scores.txt");
+  for(int i=0;i<highscores.length(); i++){
+    ocfile<<highscores.at(i)->test;
+    ocfile<<" ";
+    ocfile<<highscores.at(i)->hscore;
+    ocfile<<"\n";
+  }
+
+}
+
 
 /**Initialization of the game and resetting function */
 
 void MainWindow::begin(){
   /**If being used to reset the game it deletes every item in the list, resets lives,points and the timer interval */
   if(started || ended){
+    if(ended){
+      delete line1;
+    }
     for(int i=0;i<list.size();i++){
       delete list.at(i);
       
@@ -446,6 +561,8 @@ void MainWindow::begin(){
     lives=2;
     setLives(0);
     changePoints(-1);
+    spikescreate=false;
+    ledgecreate=false;
   }
   else{
     delete r;
@@ -480,6 +597,7 @@ void MainWindow::begin(){
 
 /** Sends Wario back to his original location and creates the coins and decreases the timeout interval by 1 */
 void MainWindow::newLevel(){
+     
   war->reset();
   /** 5-8 coins will be created on the map*/
   int num=5+rand()%4;
@@ -490,7 +608,7 @@ void MainWindow::newLevel(){
   }
   /**For the number of coins that will be created a random slot in the list will be chosen, the case value it points to will be stored in ran, and removed from the list. Then the coin of that case will be created */
   for(int i=0;i<num;i++){
-    coins++;
+    coins=num;
     int r=rand()%(c.size());
     int ran=c.at(r);
     c.removeAt(r);
@@ -510,7 +628,7 @@ void MainWindow::newLevel(){
     scene->addItem(coin1);
     list.push_back(coin1);
   }
-  if(timeout!=20){
+  if(timeout!=10){
     timeout--;
   }
 }

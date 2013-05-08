@@ -11,6 +11,7 @@ Item::Item(QPixmap*p, int nx, int ny){
   setPos(x,y);
   alive=true;
 }
+
 bool Item::isAlive(){
   return alive;
 }
@@ -184,6 +185,7 @@ void Spikes::move(){
   counter++;
   if(counter<0){
     y+=7.5;
+    setPos(x,y);
   }
   else{
   if(counter%50<20){

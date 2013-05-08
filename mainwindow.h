@@ -1,6 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <string>
+#include <iostream>
+
 #include <QMainWindow>
 #include <QMenuBar>
 #include <QGraphicsScene>
@@ -13,11 +16,20 @@
 #include <QList>
 #include <QApplication>
 #include <QKeyEvent>
+#include <QTextEdit>
+#include <QDockWidget>
+
+#include <fstream>
+#include <QLatin1String>
 
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
 
+
+
 #include "item.h"
+
+using namespace std;
 
 class ViewWindow : public QGraphicsView{
  public:
@@ -47,6 +59,7 @@ class MainWindow : public QMainWindow {
   void changePoints(int i);
   void setLives(int life);
   void newLevel();
+  void end();
 
   public slots:
 
@@ -62,6 +75,9 @@ class MainWindow : public QMainWindow {
   bool started;
   bool ended;
   int timeout;
+
+  QString nm;
+  QTextEdit *text;
 
   Screen* scene;
   ViewWindow* view;
@@ -108,8 +124,14 @@ class MainWindow : public QMainWindow {
   QGraphicsSimpleTextItem *line4;
   QGraphicsSimpleTextItem *line5;
 
+
+
 };
 
-
+struct Score{
+  QString user;
+  int hscore;
+  string test;
+};
 
 #endif
